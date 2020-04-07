@@ -68,7 +68,7 @@ function makeNewEmployee() {
             },
             {
                 type: "input",
-                message: "What is thier email?",
+                message: "What is their email?",
                 name: "email"
             },
             {
@@ -90,7 +90,6 @@ function makeNewEmployee() {
                         ]).then(function (res) {
                             let newEmp = new Engineer(response.name, response.id, response.email, res.github)
                             employeeList.push(newEmp)
-                            console.log(employeeList)
                             start();
 
                         })
@@ -106,7 +105,6 @@ function makeNewEmployee() {
                         ]).then(function (res) {
                             let newEmp = new Intern(response.name, response.id, response.email, res.school)
                             employeeList.push(newEmp)
-                            console.log(employeeList)
                             start();
                         })
                     break;
@@ -121,7 +119,6 @@ function makeNewEmployee() {
                         ]).then(function (res) {
                             let newEmp = new Manager(response.name, response.id, response.email, res.officeNumber)
                             employeeList.push(newEmp)
-                            console.log(employeeList)
                             start();
                         })
                     break;
