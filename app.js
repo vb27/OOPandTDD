@@ -140,7 +140,13 @@ function printOrQuit() {
             }
             ]).then(function (response) {
                 if (response.printOrQuit === "print") {
-                    render(employeeList)
+                    let renderCards = render(employeeList)
+                    fs.writeFile("output/team.html", renderCards, function(err){
+                        if(err){
+                            return console.log(err)
+                        }
+                        console.log("team.txt created")
+                    })
                 } else {
                     console.log("\nGoodbye!");
                     process.exit(0);
