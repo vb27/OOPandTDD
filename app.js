@@ -33,38 +33,119 @@ const render = require("./lib/htmlRenderer");
 // for further information. Be sure to test out each class and verify it generates an 
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work!```
-inquirer
-    .prompt([
-        {
-            type: "input",
-            message: "What is the name of the employee?",
-            name: "name"
-        },
-        {
-            type: "input",
-            message: "What is their ID number?",
-            name: "id"
-        },
-        {
-            type:"input",
-            message:"What is thier email?",
-            name: "email"
-        },
-        {
-            type: "list",
-            message: "What role does the new employee fall into?",
-            choices: ["Engineer", "Intern", "Manager"],
-            name: "employeeType"
-        },
-    ]).then(function(response){
-        if(response.employeeType === "Engineer"){
-            let newEmp = new Engineer(response.name, response.id, response.email)
-            newEmp.newEngi();
-        } else if(response.employeeType === "Intern"){
-            let newEmp = new Intern(response.name, response.id, response.email)
-            newEmp.newInt();
-        } else if(response.employeeType === "Manager"){
-            let newEmp = new Manager(response.name, response.id, response.email)
-            newEmp.newMan();
-        }
-    })
+employeeList = []
+
+function start() {
+    inquirer
+        .prompt([
+            {
+                type: "confirm",
+                name: "choice",
+                message: "Make a new employee?"
+            }
+        ]).then(val => {
+            if (val.choice) {
+                makeNewEmployee();
+            } else {
+                printOrQuit();
+            }
+        })
+}
+
+
+function makeNewEmployee() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                message: "What is the name of the employee?",
+                name: "name"
+            },
+            {
+                type: "input",
+                message: "What is their ID number?",
+                name: "id"
+            },
+            {
+                type: "input",
+                message: "What is thier email?",
+                name: "email"
+            },
+            {
+                type: "list",
+                message: "What role does the new employee fall into?",
+                choices: ["Engineer", "Intern", "Manager"],
+                name: "employeeType"
+            },
+        ]).then(function (response) {
+            switch (response.employeeType) {
+                case "Engineer":
+                    inquirer
+                        .prompt([
+                            {
+                                type: "input",
+                                message: "What if you GitHub username?",
+                                name: "github"
+                            }
+                        ]).then(function (res) {
+                            let newEmp = new Engineer(response.name, response.id, response.email, res.github)
+                            employeeList.push(newEmp)
+                            console.log(employeeList)
+                            start();
+
+                        })
+                    break;
+                case "Intern":
+                    inquirer
+                        .prompt([
+                            {
+                                type: "input",
+                                message: "What school do they go to?",
+                                name: "school"
+                            }
+                        ]).then(function (res) {
+                            let newEmp = new Intern(response.name, response.id, response.email, res.school)
+                            employeeList.push(newEmp)
+                            console.log(employeeList)
+                            start();
+                        })
+                    break;
+                case "Manager":
+                    inquirer
+                        .prompt([
+                            {
+                                type: "input",
+                                message: "What is their offic enumber?",
+                                name: "officeNumber"
+                            }
+                        ]).then(function (res) {
+                            let newEmp = new Manager(response.name, response.id, response.email, res.officeNumber)
+                            employeeList.push(newEmp)
+                            console.log(employeeList)
+                            start();
+                        })
+                    break;
+            }
+        })
+}
+
+function printOrQuit() {
+    inquirer
+        .prompt([
+            {
+                type: "list",
+                message: "Would you like to print your employees or quit",
+                choices: ["print", "quit"],
+                name: "printOrQuit"
+            }
+            ]).then(function (response) {
+                if (response.printOrQuit === "print") {
+                    render(employeeList)
+                } else {
+                    console.log("\nGoodbye!");
+                    process.exit(0);
+                }
+            })
+}
+
+start();
