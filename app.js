@@ -46,9 +46,25 @@ inquirer
             name: "id"
         },
         {
+            type:"input",
+            message:"What is thier email?",
+            name: "email"
+        },
+        {
             type: "list",
             message: "What role does the new employee fall into?",
             choices: ["Engineer", "Intern", "Manager"],
             name: "employeeType"
         },
-    ])
+    ]).then(function(response){
+        if(response.employeeType === "Engineer"){
+            let newEmp = new Engineer(response.name, response.id, response.email)
+            newEmp.newEngi();
+        } else if(response.employeeType === "Intern"){
+            let newEmp = new Intern(response.name, response.id, response.email)
+            newEmp.newInt();
+        } else if(response.employeeType === "Manager"){
+            let newEmp = new Manager(response.name, response.id, response.email)
+            newEmp.newMan();
+        }
+    })
